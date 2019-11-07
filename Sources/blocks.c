@@ -1193,7 +1193,7 @@ static void open_new_blocks(cmark_parser *parser, cmark_node **container,
       --c.len;
 
       S_advance_offset(parser, input, parser->first_nonspace + matched - parser->offset, false);
-      *container = add_child(parser, *container, CMARK_NODE_FOOTNOTE_DEFINITION, parser->first_nonspace + matched + 1);
+      *container = add_child(parser, *container, CMARK_NODE_FOOTNOTE_DEFINITION, parser->first_nonspace + 1);
       (*container)->as.literal = c;
 
       (*container)->internal_offset = matched;
