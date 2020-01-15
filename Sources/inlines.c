@@ -447,8 +447,8 @@ static int scan_delims(subject *subj, unsigned char c, bool *can_open,
                  (!left_flanking || cmark_utf8proc_is_punctuation(after_char));
   } else if (c == '\'' || c == '"') {
     *can_open = left_flanking &&
-        (!right_flanking || before_char == '(' || before_char == '[') &&
-        before_char != ']' && before_char != ')';
+         (!right_flanking || before_char == '(' || before_char == '[') &&
+         before_char != ']' && before_char != ')';
     *can_close = right_flanking;
   } else {
     *can_open = left_flanking;
@@ -815,7 +815,7 @@ static cmark_node *handle_entity(subject *subj) {
   len = houdini_unescape_ent(&ent, subj->input.data + subj->pos,
                              subj->input.len - subj->pos);
 
-  if (len == 0)
+  if (len <= 0)
     return make_str(subj, subj->pos - 1, subj->pos - 1, cmark_chunk_literal("&"));
 
   subj->pos += len;
