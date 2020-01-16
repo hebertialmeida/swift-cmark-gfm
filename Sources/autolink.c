@@ -192,7 +192,7 @@ static cmark_node *www_match(cmark_parser *parser, cmark_node *parent,
     node->end_line = text->end_line =
     cmark_inline_parser_get_line(inline_parser);
 
-  node->start_column = text->start_column = start - 1;
+  node->start_column = text->start_column = start;
   node->end_column = text->end_column = cmark_inline_parser_get_column(inline_parser) - 1;
 
   return node;
@@ -207,6 +207,7 @@ static cmark_node *url_match(cmark_parser *parser, cmark_node *parent,
   int max_rewind = cmark_inline_parser_get_offset(inline_parser);
   uint8_t *data = chunk->data + max_rewind;
   size_t size = chunk->len - max_rewind;
+  int start = cmark_inline_parser_get_column(inline_parser);
 
   if (size < 4 || data[1] != '/' || data[2] != '/')
     return 0;
@@ -245,6 +246,13 @@ static cmark_node *url_match(cmark_parser *parser, cmark_node *parent,
   cmark_node *text = cmark_node_new_with_mem(CMARK_NODE_TEXT, parser->mem);
   text->as.literal = url;
   cmark_node_append_child(node, text);
+
+  node->start_line = text->start_line =
+    node->end_line = text->end_line =
+    cmark_inline_parser_get_line(inline_parser);
+
+  node->start_column = text->start_column = start - rewind;
+  node->end_column = text->end_column = cmark_inline_parser_get_column(inline_parser) - 1;
 
   return node;
 }
